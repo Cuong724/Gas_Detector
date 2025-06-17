@@ -97,11 +97,11 @@ int main(void)
             sprintf(buffer, "PPM:%d\n", gas);
             UART1_SendString(buffer);
 
-            if (gas >= 600 && !alert_sent) {
+            if (gas >= 400 && !alert_sent) {
                 UART1_SendString("ALERT\n");
                 alert_sent = 1;
             }
-            else if (gas < 600) {
+            else if (gas < 400) {
                 alert_sent = 0;
             }
 
@@ -130,7 +130,7 @@ int main(void)
                 if (freq > 20.0f) freq = 20.0f;
 
                 fast_interval = (uint8_t)(1000.0f / (2.0f * freq) / 10.0f);
-                if (fast_interval < 1) fast_interval = 1;
+
                 if (fast_interval == 0) fast_interval = 1;
 
                 LED_Set(blink_fast_toggle, 0, 0, 0); // LED đỏ nháy nhanh
@@ -158,7 +158,7 @@ int main(void)
             Relay_Set(1);
         }
 
-        delay_ms(100); // kiểm tra mỗi 100ms
+        delay_ms(10); // kiểm tra mỗi 10ms
     }
 }
 
