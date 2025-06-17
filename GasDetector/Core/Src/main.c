@@ -64,7 +64,6 @@ int main(void)
 
     char buffer[16];
     uint8_t sw1_last = 0, sw2_last = 0;
-    uint8_t alert_status = 0;
     static uint8_t alert_sent = 0;
 
     while (1) {
@@ -130,7 +129,6 @@ int main(void)
                 if (freq > 20.0f) freq = 20.0f;
 
                 fast_interval = (uint8_t)(1000.0f / (2.0f * freq) / 10.0f);
-
                 if (fast_interval == 0) fast_interval = 1;
 
                 LED_Set(blink_fast_toggle, 0, 0, 0); // LED đỏ nháy nhanh
@@ -272,9 +270,9 @@ void Relay_Init(void)
 void Relay_Set(uint8_t on)
 {
     if (on)
-        GPIOB->ODR &= ~(1 << 0);  // Tắt nguồn PB0
+        GPIOB->ODR |= (1 << 0);  // Bật nguồn PB0
     else
-        GPIOB->ODR |= (1 << 0); // Bật nguồn PB0
+        GPIOB->ODR &= ~(1 << 0); // Tắt nguồn PB0
 }
 
 void delay_ms(uint32_t ms)

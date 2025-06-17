@@ -27,25 +27,25 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  00004054  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00001fa4  00000000  00000000  00004084  2**0
+ 12 .debug_info   00001f94  00000000  00000000  00004084  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00000826  00000000  00000000  00006028  2**0
+ 13 .debug_abbrev 00000826  00000000  00000000  00006018  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 000002a0  00000000  00000000  00006850  2**3
+ 14 .debug_aranges 000002a0  00000000  00000000  00006840  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_rnglists 000001e1  00000000  00000000  00006af0  2**0
+ 15 .debug_rnglists 000001e1  00000000  00000000  00006ae0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  00014bc9  00000000  00000000  00006cd1  2**0
+ 16 .debug_macro  00014bc9  00000000  00000000  00006cc1  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   00002d92  00000000  00000000  0001b89a  2**0
+ 17 .debug_line   00002d8d  00000000  00000000  0001b88a  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    00083293  00000000  00000000  0001e62c  2**0
+ 18 .debug_str    00083293  00000000  00000000  0001e617  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  000a18bf  2**0
+ 19 .comment      00000043  00000000  00000000  000a18aa  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00000fc4  00000000  00000000  000a1904  2**2
+ 20 .debug_frame  00000fc4  00000000  00000000  000a18f0  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 0000004f  00000000  00000000  000a28c8  2**0
+ 21 .debug_line_str 0000004f  00000000  00000000  000a28b4  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -210,14 +210,14 @@ int main(void)
  80002e8:	2000      	movs	r0, #0
  80002ea:	f000 fca5 	bl	8000c38 <lcd_gotoxy>
     lcd_puts("Gas:    ppm");
- 80002ee:	48ac      	ldr	r0, [pc, #688]	@ (80005a0 <main+0x2e4>)
+ 80002ee:	48ab      	ldr	r0, [pc, #684]	@ (800059c <main+0x2e0>)
  80002f0:	f000 fc8d 	bl	8000c0e <lcd_puts>
     lcd_gotoxy(0, 1);
  80002f4:	2101      	movs	r1, #1
  80002f6:	2000      	movs	r0, #0
  80002f8:	f000 fc9e 	bl	8000c38 <lcd_gotoxy>
     lcd_puts("TT:0 CB:0");
- 80002fc:	48a9      	ldr	r0, [pc, #676]	@ (80005a4 <main+0x2e8>)
+ 80002fc:	48a8      	ldr	r0, [pc, #672]	@ (80005a0 <main+0x2e4>)
  80002fe:	f000 fc86 	bl	8000c0e <lcd_puts>
 
     char buffer[16];
@@ -226,352 +226,358 @@ int main(void)
  8000304:	f887 3027 	strb.w	r3, [r7, #39]	@ 0x27
  8000308:	2300      	movs	r3, #0
  800030a:	f887 3026 	strb.w	r3, [r7, #38]	@ 0x26
-    uint8_t alert_status = 0;
- 800030e:	2300      	movs	r3, #0
- 8000310:	f887 3025 	strb.w	r3, [r7, #37]	@ 0x25
     static uint8_t alert_sent = 0;
 
     while (1) {
         uint8_t sw1_now = read_SW(SW1_PIN);
- 8000314:	200d      	movs	r0, #13
- 8000316:	f000 fd15 	bl	8000d44 <read_SW>
- 800031a:	4603      	mov	r3, r0
- 800031c:	77fb      	strb	r3, [r7, #31]
+ 800030e:	200d      	movs	r0, #13
+ 8000310:	f000 fd18 	bl	8000d44 <read_SW>
+ 8000314:	4603      	mov	r3, r0
+ 8000316:	77fb      	strb	r3, [r7, #31]
         uint8_t sw2_now = read_SW(SW2_PIN);
- 800031e:	200e      	movs	r0, #14
- 8000320:	f000 fd10 	bl	8000d44 <read_SW>
- 8000324:	4603      	mov	r3, r0
- 8000326:	77bb      	strb	r3, [r7, #30]
+ 8000318:	200e      	movs	r0, #14
+ 800031a:	f000 fd13 	bl	8000d44 <read_SW>
+ 800031e:	4603      	mov	r3, r0
+ 8000320:	77bb      	strb	r3, [r7, #30]
         uint16_t gas = 0;
- 8000328:	2300      	movs	r3, #0
- 800032a:	83bb      	strh	r3, [r7, #28]
+ 8000322:	2300      	movs	r3, #0
+ 8000324:	83bb      	strh	r3, [r7, #28]
 
         // Xử lý nút nhấn SW1 bật/tắt hệ thống
         if (sw1_now && !sw1_last) {
- 800032c:	7ffb      	ldrb	r3, [r7, #31]
- 800032e:	2b00      	cmp	r3, #0
- 8000330:	d00b      	beq.n	800034a <main+0x8e>
- 8000332:	f897 3027 	ldrb.w	r3, [r7, #39]	@ 0x27
- 8000336:	2b00      	cmp	r3, #0
- 8000338:	d107      	bne.n	800034a <main+0x8e>
+ 8000326:	7ffb      	ldrb	r3, [r7, #31]
+ 8000328:	2b00      	cmp	r3, #0
+ 800032a:	d00b      	beq.n	8000344 <main+0x88>
+ 800032c:	f897 3027 	ldrb.w	r3, [r7, #39]	@ 0x27
+ 8000330:	2b00      	cmp	r3, #0
+ 8000332:	d107      	bne.n	8000344 <main+0x88>
             system_active ^= 1;
- 800033a:	4b9b      	ldr	r3, [pc, #620]	@ (80005a8 <main+0x2ec>)
- 800033c:	781b      	ldrb	r3, [r3, #0]
- 800033e:	b2db      	uxtb	r3, r3
- 8000340:	f083 0301 	eor.w	r3, r3, #1
- 8000344:	b2da      	uxtb	r2, r3
- 8000346:	4b98      	ldr	r3, [pc, #608]	@ (80005a8 <main+0x2ec>)
- 8000348:	701a      	strb	r2, [r3, #0]
+ 8000334:	4b9b      	ldr	r3, [pc, #620]	@ (80005a4 <main+0x2e8>)
+ 8000336:	781b      	ldrb	r3, [r3, #0]
+ 8000338:	b2db      	uxtb	r3, r3
+ 800033a:	f083 0301 	eor.w	r3, r3, #1
+ 800033e:	b2da      	uxtb	r2, r3
+ 8000340:	4b98      	ldr	r3, [pc, #608]	@ (80005a4 <main+0x2e8>)
+ 8000342:	701a      	strb	r2, [r3, #0]
         }
 
         // Xử lý nút nhấn SW2 reset hệ thống
         if (sw2_now && !sw2_last) {
- 800034a:	7fbb      	ldrb	r3, [r7, #30]
- 800034c:	2b00      	cmp	r3, #0
- 800034e:	d020      	beq.n	8000392 <main+0xd6>
- 8000350:	f897 3026 	ldrb.w	r3, [r7, #38]	@ 0x26
- 8000354:	2b00      	cmp	r3, #0
- 8000356:	d11c      	bne.n	8000392 <main+0xd6>
+ 8000344:	7fbb      	ldrb	r3, [r7, #30]
+ 8000346:	2b00      	cmp	r3, #0
+ 8000348:	d020      	beq.n	800038c <main+0xd0>
+ 800034a:	f897 3026 	ldrb.w	r3, [r7, #38]	@ 0x26
+ 800034e:	2b00      	cmp	r3, #0
+ 8000350:	d11c      	bne.n	800038c <main+0xd0>
             system_active = 0;
+ 8000352:	4b94      	ldr	r3, [pc, #592]	@ (80005a4 <main+0x2e8>)
+ 8000354:	2200      	movs	r2, #0
+ 8000356:	701a      	strb	r2, [r3, #0]
+            alert_status = 0;
  8000358:	4b93      	ldr	r3, [pc, #588]	@ (80005a8 <main+0x2ec>)
  800035a:	2200      	movs	r2, #0
  800035c:	701a      	strb	r2, [r3, #0]
-            alert_status = 0;
- 800035e:	2300      	movs	r3, #0
- 8000360:	f887 3025 	strb.w	r3, [r7, #37]	@ 0x25
             lcd_gotoxy(0, 0);
- 8000364:	2100      	movs	r1, #0
- 8000366:	2000      	movs	r0, #0
- 8000368:	f000 fc66 	bl	8000c38 <lcd_gotoxy>
+ 800035e:	2100      	movs	r1, #0
+ 8000360:	2000      	movs	r0, #0
+ 8000362:	f000 fc69 	bl	8000c38 <lcd_gotoxy>
             lcd_puts("Gas:     ppm     ");
- 800036c:	488f      	ldr	r0, [pc, #572]	@ (80005ac <main+0x2f0>)
- 800036e:	f000 fc4e 	bl	8000c0e <lcd_puts>
+ 8000366:	4891      	ldr	r0, [pc, #580]	@ (80005ac <main+0x2f0>)
+ 8000368:	f000 fc51 	bl	8000c0e <lcd_puts>
             lcd_gotoxy(0, 1);
- 8000372:	2101      	movs	r1, #1
- 8000374:	2000      	movs	r0, #0
- 8000376:	f000 fc5f 	bl	8000c38 <lcd_gotoxy>
+ 800036c:	2101      	movs	r1, #1
+ 800036e:	2000      	movs	r0, #0
+ 8000370:	f000 fc62 	bl	8000c38 <lcd_gotoxy>
             lcd_puts("TT:0 CB:0       ");
- 800037a:	488d      	ldr	r0, [pc, #564]	@ (80005b0 <main+0x2f4>)
- 800037c:	f000 fc47 	bl	8000c0e <lcd_puts>
+ 8000374:	488e      	ldr	r0, [pc, #568]	@ (80005b0 <main+0x2f4>)
+ 8000376:	f000 fc4a 	bl	8000c0e <lcd_puts>
             LED_Set(0, 0, 0, 1); // Xanh lá
- 8000380:	2301      	movs	r3, #1
- 8000382:	2200      	movs	r2, #0
- 8000384:	2100      	movs	r1, #0
- 8000386:	2000      	movs	r0, #0
- 8000388:	f000 f9aa 	bl	80006e0 <LED_Set>
+ 800037a:	2301      	movs	r3, #1
+ 800037c:	2200      	movs	r2, #0
+ 800037e:	2100      	movs	r1, #0
+ 8000380:	2000      	movs	r0, #0
+ 8000382:	f000 f9ad 	bl	80006e0 <LED_Set>
             delay_ms(200);
- 800038c:	20c8      	movs	r0, #200	@ 0xc8
- 800038e:	f000 fae9 	bl	8000964 <delay_ms>
+ 8000386:	20c8      	movs	r0, #200	@ 0xc8
+ 8000388:	f000 faec 	bl	8000964 <delay_ms>
         }
 
         sw1_last = sw1_now;
- 8000392:	7ffb      	ldrb	r3, [r7, #31]
- 8000394:	f887 3027 	strb.w	r3, [r7, #39]	@ 0x27
+ 800038c:	7ffb      	ldrb	r3, [r7, #31]
+ 800038e:	f887 3027 	strb.w	r3, [r7, #39]	@ 0x27
         sw2_last = sw2_now;
- 8000398:	7fbb      	ldrb	r3, [r7, #30]
- 800039a:	f887 3026 	strb.w	r3, [r7, #38]	@ 0x26
+ 8000392:	7fbb      	ldrb	r3, [r7, #30]
+ 8000394:	f887 3026 	strb.w	r3, [r7, #38]	@ 0x26
 
         if (system_active) {
- 800039e:	4b82      	ldr	r3, [pc, #520]	@ (80005a8 <main+0x2ec>)
- 80003a0:	781b      	ldrb	r3, [r3, #0]
- 80003a2:	b2db      	uxtb	r3, r3
- 80003a4:	2b00      	cmp	r3, #0
- 80003a6:	f000 80d4 	beq.w	8000552 <main+0x296>
+ 8000398:	4b82      	ldr	r3, [pc, #520]	@ (80005a4 <main+0x2e8>)
+ 800039a:	781b      	ldrb	r3, [r3, #0]
+ 800039c:	b2db      	uxtb	r3, r3
+ 800039e:	2b00      	cmp	r3, #0
+ 80003a0:	f000 80d4 	beq.w	800054c <main+0x290>
             gas = MQ2_Read();
- 80003aa:	f000 fce5 	bl	8000d78 <MQ2_Read>
- 80003ae:	4603      	mov	r3, r0
- 80003b0:	83bb      	strh	r3, [r7, #28]
+ 80003a4:	f000 fce8 	bl	8000d78 <MQ2_Read>
+ 80003a8:	4603      	mov	r3, r0
+ 80003aa:	83bb      	strh	r3, [r7, #28]
             sprintf(buffer, "PPM:%d\n", gas);
- 80003b2:	8bba      	ldrh	r2, [r7, #28]
- 80003b4:	f107 030c 	add.w	r3, r7, #12
- 80003b8:	497e      	ldr	r1, [pc, #504]	@ (80005b4 <main+0x2f8>)
- 80003ba:	4618      	mov	r0, r3
- 80003bc:	f000 fe06 	bl	8000fcc <siprintf>
+ 80003ac:	8bba      	ldrh	r2, [r7, #28]
+ 80003ae:	f107 030c 	add.w	r3, r7, #12
+ 80003b2:	4980      	ldr	r1, [pc, #512]	@ (80005b4 <main+0x2f8>)
+ 80003b4:	4618      	mov	r0, r3
+ 80003b6:	f000 fe09 	bl	8000fcc <siprintf>
             UART1_SendString(buffer);
- 80003c0:	f107 030c 	add.w	r3, r7, #12
- 80003c4:	4618      	mov	r0, r3
- 80003c6:	f000 f957 	bl	8000678 <UART1_SendString>
+ 80003ba:	f107 030c 	add.w	r3, r7, #12
+ 80003be:	4618      	mov	r0, r3
+ 80003c0:	f000 f95a 	bl	8000678 <UART1_SendString>
 
             if (gas >= 400 && !alert_sent) {
- 80003ca:	8bbb      	ldrh	r3, [r7, #28]
- 80003cc:	f5b3 7fc8 	cmp.w	r3, #400	@ 0x190
- 80003d0:	d30a      	bcc.n	80003e8 <main+0x12c>
- 80003d2:	4b79      	ldr	r3, [pc, #484]	@ (80005b8 <main+0x2fc>)
- 80003d4:	781b      	ldrb	r3, [r3, #0]
- 80003d6:	2b00      	cmp	r3, #0
- 80003d8:	d106      	bne.n	80003e8 <main+0x12c>
+ 80003c4:	8bbb      	ldrh	r3, [r7, #28]
+ 80003c6:	f5b3 7fc8 	cmp.w	r3, #400	@ 0x190
+ 80003ca:	d30a      	bcc.n	80003e2 <main+0x126>
+ 80003cc:	4b7a      	ldr	r3, [pc, #488]	@ (80005b8 <main+0x2fc>)
+ 80003ce:	781b      	ldrb	r3, [r3, #0]
+ 80003d0:	2b00      	cmp	r3, #0
+ 80003d2:	d106      	bne.n	80003e2 <main+0x126>
                 UART1_SendString("ALERT\n");
- 80003da:	4878      	ldr	r0, [pc, #480]	@ (80005bc <main+0x300>)
- 80003dc:	f000 f94c 	bl	8000678 <UART1_SendString>
+ 80003d4:	4879      	ldr	r0, [pc, #484]	@ (80005bc <main+0x300>)
+ 80003d6:	f000 f94f 	bl	8000678 <UART1_SendString>
                 alert_sent = 1;
- 80003e0:	4b75      	ldr	r3, [pc, #468]	@ (80005b8 <main+0x2fc>)
- 80003e2:	2201      	movs	r2, #1
- 80003e4:	701a      	strb	r2, [r3, #0]
- 80003e6:	e006      	b.n	80003f6 <main+0x13a>
+ 80003da:	4b77      	ldr	r3, [pc, #476]	@ (80005b8 <main+0x2fc>)
+ 80003dc:	2201      	movs	r2, #1
+ 80003de:	701a      	strb	r2, [r3, #0]
+ 80003e0:	e006      	b.n	80003f0 <main+0x134>
             }
             else if (gas < 400) {
- 80003e8:	8bbb      	ldrh	r3, [r7, #28]
- 80003ea:	f5b3 7fc8 	cmp.w	r3, #400	@ 0x190
- 80003ee:	d202      	bcs.n	80003f6 <main+0x13a>
+ 80003e2:	8bbb      	ldrh	r3, [r7, #28]
+ 80003e4:	f5b3 7fc8 	cmp.w	r3, #400	@ 0x190
+ 80003e8:	d202      	bcs.n	80003f0 <main+0x134>
                 alert_sent = 0;
- 80003f0:	4b71      	ldr	r3, [pc, #452]	@ (80005b8 <main+0x2fc>)
- 80003f2:	2200      	movs	r2, #0
- 80003f4:	701a      	strb	r2, [r3, #0]
+ 80003ea:	4b73      	ldr	r3, [pc, #460]	@ (80005b8 <main+0x2fc>)
+ 80003ec:	2200      	movs	r2, #0
+ 80003ee:	701a      	strb	r2, [r3, #0]
             }
 
             // Xác định mức cảnh báo và điều khiển LED
             if (gas < 200) {
- 80003f6:	8bbb      	ldrh	r3, [r7, #28]
- 80003f8:	2bc7      	cmp	r3, #199	@ 0xc7
- 80003fa:	d80f      	bhi.n	800041c <main+0x160>
+ 80003f0:	8bbb      	ldrh	r3, [r7, #28]
+ 80003f2:	2bc7      	cmp	r3, #199	@ 0xc7
+ 80003f4:	d80f      	bhi.n	8000416 <main+0x15a>
                 alert_status = 0;
- 80003fc:	2300      	movs	r3, #0
- 80003fe:	f887 3025 	strb.w	r3, [r7, #37]	@ 0x25
+ 80003f6:	4b6c      	ldr	r3, [pc, #432]	@ (80005a8 <main+0x2ec>)
+ 80003f8:	2200      	movs	r2, #0
+ 80003fa:	701a      	strb	r2, [r3, #0]
                 LED_Set(0, 0, 1, 0); // Xanh dương
- 8000402:	2300      	movs	r3, #0
- 8000404:	2201      	movs	r2, #1
- 8000406:	2100      	movs	r1, #0
- 8000408:	2000      	movs	r0, #0
- 800040a:	f000 f969 	bl	80006e0 <LED_Set>
+ 80003fc:	2300      	movs	r3, #0
+ 80003fe:	2201      	movs	r2, #1
+ 8000400:	2100      	movs	r1, #0
+ 8000402:	2000      	movs	r0, #0
+ 8000404:	f000 f96c 	bl	80006e0 <LED_Set>
                 Buzzer_Set(0);
- 800040e:	2000      	movs	r0, #0
- 8000410:	f000 fa4e 	bl	80008b0 <Buzzer_Set>
+ 8000408:	2000      	movs	r0, #0
+ 800040a:	f000 fa51 	bl	80008b0 <Buzzer_Set>
                 Relay_Set(1);
- 8000414:	2001      	movs	r0, #1
- 8000416:	f000 fa87 	bl	8000928 <Relay_Set>
- 800041a:	e075      	b.n	8000508 <main+0x24c>
+ 800040e:	2001      	movs	r0, #1
+ 8000410:	f000 fa8a 	bl	8000928 <Relay_Set>
+ 8000414:	e075      	b.n	8000502 <main+0x246>
             }
             else if (gas < 400) {
- 800041c:	8bbb      	ldrh	r3, [r7, #28]
- 800041e:	f5b3 7fc8 	cmp.w	r3, #400	@ 0x190
- 8000422:	d20f      	bcs.n	8000444 <main+0x188>
+ 8000416:	8bbb      	ldrh	r3, [r7, #28]
+ 8000418:	f5b3 7fc8 	cmp.w	r3, #400	@ 0x190
+ 800041c:	d20f      	bcs.n	800043e <main+0x182>
                 alert_status = 1;
- 8000424:	2301      	movs	r3, #1
- 8000426:	f887 3025 	strb.w	r3, [r7, #37]	@ 0x25
+ 800041e:	4b62      	ldr	r3, [pc, #392]	@ (80005a8 <main+0x2ec>)
+ 8000420:	2201      	movs	r2, #1
+ 8000422:	701a      	strb	r2, [r3, #0]
                 LED_Set(0, 1, 0, 0); // Vàng
- 800042a:	2300      	movs	r3, #0
- 800042c:	2200      	movs	r2, #0
- 800042e:	2101      	movs	r1, #1
- 8000430:	2000      	movs	r0, #0
- 8000432:	f000 f955 	bl	80006e0 <LED_Set>
+ 8000424:	2300      	movs	r3, #0
+ 8000426:	2200      	movs	r2, #0
+ 8000428:	2101      	movs	r1, #1
+ 800042a:	2000      	movs	r0, #0
+ 800042c:	f000 f958 	bl	80006e0 <LED_Set>
                 Buzzer_Set(0);
- 8000436:	2000      	movs	r0, #0
- 8000438:	f000 fa3a 	bl	80008b0 <Buzzer_Set>
+ 8000430:	2000      	movs	r0, #0
+ 8000432:	f000 fa3d 	bl	80008b0 <Buzzer_Set>
                 Relay_Set(1);
- 800043c:	2001      	movs	r0, #1
- 800043e:	f000 fa73 	bl	8000928 <Relay_Set>
- 8000442:	e061      	b.n	8000508 <main+0x24c>
+ 8000436:	2001      	movs	r0, #1
+ 8000438:	f000 fa76 	bl	8000928 <Relay_Set>
+ 800043c:	e061      	b.n	8000502 <main+0x246>
             }
             else if (gas < 600) {
- 8000444:	8bbb      	ldrh	r3, [r7, #28]
- 8000446:	f5b3 7f16 	cmp.w	r3, #600	@ 0x258
- 800044a:	d211      	bcs.n	8000470 <main+0x1b4>
+ 800043e:	8bbb      	ldrh	r3, [r7, #28]
+ 8000440:	f5b3 7f16 	cmp.w	r3, #600	@ 0x258
+ 8000444:	d211      	bcs.n	800046a <main+0x1ae>
                 alert_status = 2;
- 800044c:	2302      	movs	r3, #2
- 800044e:	f887 3025 	strb.w	r3, [r7, #37]	@ 0x25
+ 8000446:	4b58      	ldr	r3, [pc, #352]	@ (80005a8 <main+0x2ec>)
+ 8000448:	2202      	movs	r2, #2
+ 800044a:	701a      	strb	r2, [r3, #0]
                 LED_Set(blink_1hz_toggle, 0, 0, 0); // Đỏ nháy 1Hz
- 8000452:	4b5b      	ldr	r3, [pc, #364]	@ (80005c0 <main+0x304>)
- 8000454:	781b      	ldrb	r3, [r3, #0]
- 8000456:	b2d8      	uxtb	r0, r3
- 8000458:	2300      	movs	r3, #0
- 800045a:	2200      	movs	r2, #0
- 800045c:	2100      	movs	r1, #0
- 800045e:	f000 f93f 	bl	80006e0 <LED_Set>
+ 800044c:	4b5c      	ldr	r3, [pc, #368]	@ (80005c0 <main+0x304>)
+ 800044e:	781b      	ldrb	r3, [r3, #0]
+ 8000450:	b2d8      	uxtb	r0, r3
+ 8000452:	2300      	movs	r3, #0
+ 8000454:	2200      	movs	r2, #0
+ 8000456:	2100      	movs	r1, #0
+ 8000458:	f000 f942 	bl	80006e0 <LED_Set>
                 Buzzer_Set(0);
- 8000462:	2000      	movs	r0, #0
- 8000464:	f000 fa24 	bl	80008b0 <Buzzer_Set>
+ 800045c:	2000      	movs	r0, #0
+ 800045e:	f000 fa27 	bl	80008b0 <Buzzer_Set>
                 Relay_Set(1);
- 8000468:	2001      	movs	r0, #1
- 800046a:	f000 fa5d 	bl	8000928 <Relay_Set>
- 800046e:	e04b      	b.n	8000508 <main+0x24c>
+ 8000462:	2001      	movs	r0, #1
+ 8000464:	f000 fa60 	bl	8000928 <Relay_Set>
+ 8000468:	e04b      	b.n	8000502 <main+0x246>
             }
             else {
                 alert_status = 3;
- 8000470:	2303      	movs	r3, #3
- 8000472:	f887 3025 	strb.w	r3, [r7, #37]	@ 0x25
+ 800046a:	4b4f      	ldr	r3, [pc, #316]	@ (80005a8 <main+0x2ec>)
+ 800046c:	2203      	movs	r2, #3
+ 800046e:	701a      	strb	r2, [r3, #0]
                 float freq = 2.0f + ((float)(gas - 600) * 18.0f / 400.0f);
- 8000476:	8bbb      	ldrh	r3, [r7, #28]
- 8000478:	f5a3 7316 	sub.w	r3, r3, #600	@ 0x258
- 800047c:	ee07 3a90 	vmov	s15, r3
- 8000480:	eef8 7ae7 	vcvt.f32.s32	s15, s15
- 8000484:	eeb3 7a02 	vmov.f32	s14, #50	@ 0x41900000  18.0
- 8000488:	ee27 7a87 	vmul.f32	s14, s15, s14
- 800048c:	eddf 6a4d 	vldr	s13, [pc, #308]	@ 80005c4 <main+0x308>
- 8000490:	eec7 7a26 	vdiv.f32	s15, s14, s13
- 8000494:	eeb0 7a00 	vmov.f32	s14, #0	@ 0x40000000  2.0
- 8000498:	ee77 7a87 	vadd.f32	s15, s15, s14
- 800049c:	edc7 7a08 	vstr	s15, [r7, #32]
+ 8000470:	8bbb      	ldrh	r3, [r7, #28]
+ 8000472:	f5a3 7316 	sub.w	r3, r3, #600	@ 0x258
+ 8000476:	ee07 3a90 	vmov	s15, r3
+ 800047a:	eef8 7ae7 	vcvt.f32.s32	s15, s15
+ 800047e:	eeb3 7a02 	vmov.f32	s14, #50	@ 0x41900000  18.0
+ 8000482:	ee27 7a87 	vmul.f32	s14, s15, s14
+ 8000486:	eddf 6a4f 	vldr	s13, [pc, #316]	@ 80005c4 <main+0x308>
+ 800048a:	eec7 7a26 	vdiv.f32	s15, s14, s13
+ 800048e:	eeb0 7a00 	vmov.f32	s14, #0	@ 0x40000000  2.0
+ 8000492:	ee77 7a87 	vadd.f32	s15, s15, s14
+ 8000496:	edc7 7a08 	vstr	s15, [r7, #32]
                 if (freq > 20.0f) freq = 20.0f;
- 80004a0:	edd7 7a08 	vldr	s15, [r7, #32]
- 80004a4:	eeb3 7a04 	vmov.f32	s14, #52	@ 0x41a00000  20.0
- 80004a8:	eef4 7ac7 	vcmpe.f32	s15, s14
- 80004ac:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
- 80004b0:	dd01      	ble.n	80004b6 <main+0x1fa>
- 80004b2:	4b45      	ldr	r3, [pc, #276]	@ (80005c8 <main+0x30c>)
- 80004b4:	623b      	str	r3, [r7, #32]
+ 800049a:	edd7 7a08 	vldr	s15, [r7, #32]
+ 800049e:	eeb3 7a04 	vmov.f32	s14, #52	@ 0x41a00000  20.0
+ 80004a2:	eef4 7ac7 	vcmpe.f32	s15, s14
+ 80004a6:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
+ 80004aa:	dd01      	ble.n	80004b0 <main+0x1f4>
+ 80004ac:	4b46      	ldr	r3, [pc, #280]	@ (80005c8 <main+0x30c>)
+ 80004ae:	623b      	str	r3, [r7, #32]
 
                 fast_interval = (uint8_t)(1000.0f / (2.0f * freq) / 10.0f);
- 80004b6:	edd7 7a08 	vldr	s15, [r7, #32]
- 80004ba:	ee77 7aa7 	vadd.f32	s15, s15, s15
- 80004be:	eddf 6a43 	vldr	s13, [pc, #268]	@ 80005cc <main+0x310>
- 80004c2:	ee86 7aa7 	vdiv.f32	s14, s13, s15
- 80004c6:	eef2 6a04 	vmov.f32	s13, #36	@ 0x41200000  10.0
- 80004ca:	eec7 7a26 	vdiv.f32	s15, s14, s13
- 80004ce:	eefc 7ae7 	vcvt.u32.f32	s15, s15
- 80004d2:	edc7 7a01 	vstr	s15, [r7, #4]
- 80004d6:	793b      	ldrb	r3, [r7, #4]
- 80004d8:	b2da      	uxtb	r2, r3
- 80004da:	4b3d      	ldr	r3, [pc, #244]	@ (80005d0 <main+0x314>)
- 80004dc:	701a      	strb	r2, [r3, #0]
-
+ 80004b0:	edd7 7a08 	vldr	s15, [r7, #32]
+ 80004b4:	ee77 7aa7 	vadd.f32	s15, s15, s15
+ 80004b8:	eddf 6a44 	vldr	s13, [pc, #272]	@ 80005cc <main+0x310>
+ 80004bc:	ee86 7aa7 	vdiv.f32	s14, s13, s15
+ 80004c0:	eef2 6a04 	vmov.f32	s13, #36	@ 0x41200000  10.0
+ 80004c4:	eec7 7a26 	vdiv.f32	s15, s14, s13
+ 80004c8:	eefc 7ae7 	vcvt.u32.f32	s15, s15
+ 80004cc:	edc7 7a01 	vstr	s15, [r7, #4]
+ 80004d0:	793b      	ldrb	r3, [r7, #4]
+ 80004d2:	b2da      	uxtb	r2, r3
+ 80004d4:	4b3e      	ldr	r3, [pc, #248]	@ (80005d0 <main+0x314>)
+ 80004d6:	701a      	strb	r2, [r3, #0]
                 if (fast_interval == 0) fast_interval = 1;
- 80004de:	4b3c      	ldr	r3, [pc, #240]	@ (80005d0 <main+0x314>)
- 80004e0:	781b      	ldrb	r3, [r3, #0]
- 80004e2:	2b00      	cmp	r3, #0
- 80004e4:	d102      	bne.n	80004ec <main+0x230>
- 80004e6:	4b3a      	ldr	r3, [pc, #232]	@ (80005d0 <main+0x314>)
- 80004e8:	2201      	movs	r2, #1
- 80004ea:	701a      	strb	r2, [r3, #0]
+ 80004d8:	4b3d      	ldr	r3, [pc, #244]	@ (80005d0 <main+0x314>)
+ 80004da:	781b      	ldrb	r3, [r3, #0]
+ 80004dc:	2b00      	cmp	r3, #0
+ 80004de:	d102      	bne.n	80004e6 <main+0x22a>
+ 80004e0:	4b3b      	ldr	r3, [pc, #236]	@ (80005d0 <main+0x314>)
+ 80004e2:	2201      	movs	r2, #1
+ 80004e4:	701a      	strb	r2, [r3, #0]
 
                 LED_Set(blink_fast_toggle, 0, 0, 0); // LED đỏ nháy nhanh
- 80004ec:	4b39      	ldr	r3, [pc, #228]	@ (80005d4 <main+0x318>)
- 80004ee:	781b      	ldrb	r3, [r3, #0]
- 80004f0:	b2d8      	uxtb	r0, r3
- 80004f2:	2300      	movs	r3, #0
- 80004f4:	2200      	movs	r2, #0
- 80004f6:	2100      	movs	r1, #0
- 80004f8:	f000 f8f2 	bl	80006e0 <LED_Set>
+ 80004e6:	4b3b      	ldr	r3, [pc, #236]	@ (80005d4 <main+0x318>)
+ 80004e8:	781b      	ldrb	r3, [r3, #0]
+ 80004ea:	b2d8      	uxtb	r0, r3
+ 80004ec:	2300      	movs	r3, #0
+ 80004ee:	2200      	movs	r2, #0
+ 80004f0:	2100      	movs	r1, #0
+ 80004f2:	f000 f8f5 	bl	80006e0 <LED_Set>
                 Buzzer_Set(1); //  Bật còi
- 80004fc:	2001      	movs	r0, #1
- 80004fe:	f000 f9d7 	bl	80008b0 <Buzzer_Set>
+ 80004f6:	2001      	movs	r0, #1
+ 80004f8:	f000 f9da 	bl	80008b0 <Buzzer_Set>
                 Relay_Set(0);
- 8000502:	2000      	movs	r0, #0
- 8000504:	f000 fa10 	bl	8000928 <Relay_Set>
+ 80004fc:	2000      	movs	r0, #0
+ 80004fe:	f000 fa13 	bl	8000928 <Relay_Set>
             }
 
 
             // Hiển thị lên LCD
             lcd_gotoxy(0, 0);
- 8000508:	2100      	movs	r1, #0
- 800050a:	2000      	movs	r0, #0
- 800050c:	f000 fb94 	bl	8000c38 <lcd_gotoxy>
+ 8000502:	2100      	movs	r1, #0
+ 8000504:	2000      	movs	r0, #0
+ 8000506:	f000 fb97 	bl	8000c38 <lcd_gotoxy>
             sprintf(buffer, "Gas:%4d ppm", gas);
- 8000510:	8bba      	ldrh	r2, [r7, #28]
- 8000512:	f107 030c 	add.w	r3, r7, #12
- 8000516:	4930      	ldr	r1, [pc, #192]	@ (80005d8 <main+0x31c>)
- 8000518:	4618      	mov	r0, r3
- 800051a:	f000 fd57 	bl	8000fcc <siprintf>
+ 800050a:	8bba      	ldrh	r2, [r7, #28]
+ 800050c:	f107 030c 	add.w	r3, r7, #12
+ 8000510:	4931      	ldr	r1, [pc, #196]	@ (80005d8 <main+0x31c>)
+ 8000512:	4618      	mov	r0, r3
+ 8000514:	f000 fd5a 	bl	8000fcc <siprintf>
             lcd_puts(buffer);
- 800051e:	f107 030c 	add.w	r3, r7, #12
- 8000522:	4618      	mov	r0, r3
- 8000524:	f000 fb73 	bl	8000c0e <lcd_puts>
+ 8000518:	f107 030c 	add.w	r3, r7, #12
+ 800051c:	4618      	mov	r0, r3
+ 800051e:	f000 fb76 	bl	8000c0e <lcd_puts>
 
             lcd_gotoxy(0, 1);
- 8000528:	2101      	movs	r1, #1
- 800052a:	2000      	movs	r0, #0
- 800052c:	f000 fb84 	bl	8000c38 <lcd_gotoxy>
+ 8000522:	2101      	movs	r1, #1
+ 8000524:	2000      	movs	r0, #0
+ 8000526:	f000 fb87 	bl	8000c38 <lcd_gotoxy>
             sprintf(buffer, "TT:%d CB:%d", system_active, alert_status);
- 8000530:	4b1d      	ldr	r3, [pc, #116]	@ (80005a8 <main+0x2ec>)
- 8000532:	781b      	ldrb	r3, [r3, #0]
- 8000534:	b2db      	uxtb	r3, r3
- 8000536:	461a      	mov	r2, r3
- 8000538:	f897 3025 	ldrb.w	r3, [r7, #37]	@ 0x25
- 800053c:	f107 000c 	add.w	r0, r7, #12
- 8000540:	4926      	ldr	r1, [pc, #152]	@ (80005dc <main+0x320>)
- 8000542:	f000 fd43 	bl	8000fcc <siprintf>
+ 800052a:	4b1e      	ldr	r3, [pc, #120]	@ (80005a4 <main+0x2e8>)
+ 800052c:	781b      	ldrb	r3, [r3, #0]
+ 800052e:	b2db      	uxtb	r3, r3
+ 8000530:	461a      	mov	r2, r3
+ 8000532:	4b1d      	ldr	r3, [pc, #116]	@ (80005a8 <main+0x2ec>)
+ 8000534:	781b      	ldrb	r3, [r3, #0]
+ 8000536:	f107 000c 	add.w	r0, r7, #12
+ 800053a:	4928      	ldr	r1, [pc, #160]	@ (80005dc <main+0x320>)
+ 800053c:	f000 fd46 	bl	8000fcc <siprintf>
             lcd_puts(buffer);
- 8000546:	f107 030c 	add.w	r3, r7, #12
- 800054a:	4618      	mov	r0, r3
- 800054c:	f000 fb5f 	bl	8000c0e <lcd_puts>
- 8000550:	e022      	b.n	8000598 <main+0x2dc>
+ 8000540:	f107 030c 	add.w	r3, r7, #12
+ 8000544:	4618      	mov	r0, r3
+ 8000546:	f000 fb62 	bl	8000c0e <lcd_puts>
+ 800054a:	e022      	b.n	8000592 <main+0x2d6>
         }
         else {
             alert_status = 0;
- 8000552:	2300      	movs	r3, #0
- 8000554:	f887 3025 	strb.w	r3, [r7, #37]	@ 0x25
+ 800054c:	4b16      	ldr	r3, [pc, #88]	@ (80005a8 <main+0x2ec>)
+ 800054e:	2200      	movs	r2, #0
+ 8000550:	701a      	strb	r2, [r3, #0]
             LED_Set(0, 0, 0, 1); // Xanh lá cây
- 8000558:	2301      	movs	r3, #1
- 800055a:	2200      	movs	r2, #0
- 800055c:	2100      	movs	r1, #0
- 800055e:	2000      	movs	r0, #0
- 8000560:	f000 f8be 	bl	80006e0 <LED_Set>
+ 8000552:	2301      	movs	r3, #1
+ 8000554:	2200      	movs	r2, #0
+ 8000556:	2100      	movs	r1, #0
+ 8000558:	2000      	movs	r0, #0
+ 800055a:	f000 f8c1 	bl	80006e0 <LED_Set>
             lcd_gotoxy(0, 1);
- 8000564:	2101      	movs	r1, #1
- 8000566:	2000      	movs	r0, #0
- 8000568:	f000 fb66 	bl	8000c38 <lcd_gotoxy>
+ 800055e:	2101      	movs	r1, #1
+ 8000560:	2000      	movs	r0, #0
+ 8000562:	f000 fb69 	bl	8000c38 <lcd_gotoxy>
             sprintf(buffer, "TT:%d CB:%d", system_active, alert_status);
- 800056c:	4b0e      	ldr	r3, [pc, #56]	@ (80005a8 <main+0x2ec>)
- 800056e:	781b      	ldrb	r3, [r3, #0]
- 8000570:	b2db      	uxtb	r3, r3
- 8000572:	461a      	mov	r2, r3
- 8000574:	f897 3025 	ldrb.w	r3, [r7, #37]	@ 0x25
- 8000578:	f107 000c 	add.w	r0, r7, #12
- 800057c:	4917      	ldr	r1, [pc, #92]	@ (80005dc <main+0x320>)
- 800057e:	f000 fd25 	bl	8000fcc <siprintf>
+ 8000566:	4b0f      	ldr	r3, [pc, #60]	@ (80005a4 <main+0x2e8>)
+ 8000568:	781b      	ldrb	r3, [r3, #0]
+ 800056a:	b2db      	uxtb	r3, r3
+ 800056c:	461a      	mov	r2, r3
+ 800056e:	4b0e      	ldr	r3, [pc, #56]	@ (80005a8 <main+0x2ec>)
+ 8000570:	781b      	ldrb	r3, [r3, #0]
+ 8000572:	f107 000c 	add.w	r0, r7, #12
+ 8000576:	4919      	ldr	r1, [pc, #100]	@ (80005dc <main+0x320>)
+ 8000578:	f000 fd28 	bl	8000fcc <siprintf>
             lcd_puts(buffer);
- 8000582:	f107 030c 	add.w	r3, r7, #12
- 8000586:	4618      	mov	r0, r3
- 8000588:	f000 fb41 	bl	8000c0e <lcd_puts>
+ 800057c:	f107 030c 	add.w	r3, r7, #12
+ 8000580:	4618      	mov	r0, r3
+ 8000582:	f000 fb44 	bl	8000c0e <lcd_puts>
             Buzzer_Set(0);
- 800058c:	2000      	movs	r0, #0
- 800058e:	f000 f98f 	bl	80008b0 <Buzzer_Set>
+ 8000586:	2000      	movs	r0, #0
+ 8000588:	f000 f992 	bl	80008b0 <Buzzer_Set>
             Relay_Set(1);
- 8000592:	2001      	movs	r0, #1
- 8000594:	f000 f9c8 	bl	8000928 <Relay_Set>
+ 800058c:	2001      	movs	r0, #1
+ 800058e:	f000 f9cb 	bl	8000928 <Relay_Set>
         }
 
         delay_ms(10); // kiểm tra mỗi 10ms
- 8000598:	200a      	movs	r0, #10
- 800059a:	f000 f9e3 	bl	8000964 <delay_ms>
+ 8000592:	200a      	movs	r0, #10
+ 8000594:	f000 f9e6 	bl	8000964 <delay_ms>
     while (1) {
- 800059e:	e6b9      	b.n	8000314 <main+0x58>
- 80005a0:	080020a8 	.word	0x080020a8
- 80005a4:	080020b4 	.word	0x080020b4
- 80005a8:	20000070 	.word	0x20000070
+ 8000598:	e6b9      	b.n	800030e <main+0x52>
+ 800059a:	bf00      	nop
+ 800059c:	080020a8 	.word	0x080020a8
+ 80005a0:	080020b4 	.word	0x080020b4
+ 80005a4:	20000070 	.word	0x20000070
+ 80005a8:	20000073 	.word	0x20000073
  80005ac:	080020c0 	.word	0x080020c0
  80005b0:	080020d4 	.word	0x080020d4
  80005b4:	080020e8 	.word	0x080020e8
- 80005b8:	20000073 	.word	0x20000073
+ 80005b8:	20000074 	.word	0x20000074
  80005bc:	080020f0 	.word	0x080020f0
  80005c0:	20000071 	.word	0x20000071
  80005c4:	43c80000 	.word	0x43c80000
@@ -953,9 +959,9 @@ void TIM2_IRQHandler(void)
  8000858:	46bd      	mov	sp, r7
  800085a:	f85d 7b04 	ldr.w	r7, [sp], #4
  800085e:	4770      	bx	lr
- 8000860:	20000074 	.word	0x20000074
+ 8000860:	20000075 	.word	0x20000075
  8000864:	20000071 	.word	0x20000071
- 8000868:	20000075 	.word	0x20000075
+ 8000868:	20000076 	.word	0x20000076
  800086c:	20000000 	.word	0x20000000
  8000870:	20000072 	.word	0x20000072
 
@@ -1078,21 +1084,21 @@ void Relay_Set(uint8_t on)
  8000932:	79fb      	ldrb	r3, [r7, #7]
  8000934:	2b00      	cmp	r3, #0
  8000936:	d006      	beq.n	8000946 <Relay_Set+0x1e>
-        GPIOB->ODR &= ~(1 << 0);  // Tắt nguồn PB0
+        GPIOB->ODR |= (1 << 0);  // Bật nguồn PB0
  8000938:	4b09      	ldr	r3, [pc, #36]	@ (8000960 <Relay_Set+0x38>)
  800093a:	695b      	ldr	r3, [r3, #20]
  800093c:	4a08      	ldr	r2, [pc, #32]	@ (8000960 <Relay_Set+0x38>)
- 800093e:	f023 0301 	bic.w	r3, r3, #1
+ 800093e:	f043 0301 	orr.w	r3, r3, #1
  8000942:	6153      	str	r3, [r2, #20]
     else
-        GPIOB->ODR |= (1 << 0); // Bật nguồn PB0
+        GPIOB->ODR &= ~(1 << 0); // Tắt nguồn PB0
 }
  8000944:	e005      	b.n	8000952 <Relay_Set+0x2a>
-        GPIOB->ODR |= (1 << 0); // Bật nguồn PB0
+        GPIOB->ODR &= ~(1 << 0); // Tắt nguồn PB0
  8000946:	4b06      	ldr	r3, [pc, #24]	@ (8000960 <Relay_Set+0x38>)
  8000948:	695b      	ldr	r3, [r3, #20]
  800094a:	4a05      	ldr	r2, [pc, #20]	@ (8000960 <Relay_Set+0x38>)
- 800094c:	f043 0301 	orr.w	r3, r3, #1
+ 800094c:	f023 0301 	bic.w	r3, r3, #1
  8000950:	6153      	str	r3, [r2, #20]
 }
  8000952:	bf00      	nop
