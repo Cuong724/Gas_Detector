@@ -1,6 +1,6 @@
 #define BLYNK_TEMPLATE_ID "TMPL6XvmEvtrk"
 #define BLYNK_TEMPLATE_NAME "Gas Detector"
-#define BLYNK_AUTH_TOKEN "1yEVhZIHkQ1cZFt6J4IIiDkCyNU9e0g1"
+#define BLYNK_AUTH_TOKEN "Auth Token"     //Cần nhập Auth Token để hoàn thiện code
 
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
